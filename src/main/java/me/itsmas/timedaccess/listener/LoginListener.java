@@ -4,6 +4,8 @@ import me.itsmas.timedaccess.TimedAccess;
 import me.itsmas.timedaccess.util.Message;
 import me.itsmas.timedaccess.util.Permission;
 import me.itsmas.timedaccess.util.UtilServer;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,6 +28,13 @@ public class LoginListener implements Listener
     public void onLogin(PlayerLoginEvent event)
     {
         Player player = event.getPlayer();
+
+        plugin.getDataManager().handleLogin(player);
+
+        if (!plugin.getDataManager().hasPlayedBefore(player)) {
+            plugin.getDataManager().extendTime(player, plugin.getDefaultTime(), "Added default time", null);
+            return;
+        }
 
         if (Permission.hasBypass(player))
         {
