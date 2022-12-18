@@ -4,6 +4,9 @@ author: Mas281
 
 main: me.itsmas.timedaccess.TimedAccess
 
+softdepend:
+  - PlaceholderAPI
+
 commands:
   timedaccess:
     aliases: [ta]

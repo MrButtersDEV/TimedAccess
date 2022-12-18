@@ -10,7 +10,7 @@ public final class UtilTime
     {
         try
         {
-            return Integer.parseInt(input);
+            return Long.parseLong(input);
         }
         catch (IllegalArgumentException ex)
         {
