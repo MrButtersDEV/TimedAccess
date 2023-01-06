@@ -1,12 +1,14 @@
 name: TimedAccess
 version: ${project.version}
-author: Mas281
+author: Mas281, BUTTERFEILD8
 
 main: me.itsmas.timedaccess.TimedAccess
-
+api-version: 1.19
 softdepend:
   - PlaceholderAPI
 
 commands:
   timedaccess:
-    aliases: [ta]
+    aliases:
+      - ta
+      - playtime

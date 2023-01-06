@@ -3,11 +3,13 @@ package me.itsmas.timedaccess;
 import me.itsmas.timedaccess.command.MainCommand;
 import me.itsmas.timedaccess.data.DataManager;
 import me.itsmas.timedaccess.listener.LoginListener;
+import me.itsmas.timedaccess.listener.RedeemPlaytimeListener;
 import me.itsmas.timedaccess.placeholder.PlaceholderHook;
 import me.itsmas.timedaccess.task.TimeCheckTask;
 import me.itsmas.timedaccess.util.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.LocalDateTime;
@@ -18,9 +20,15 @@ public class TimedAccess extends JavaPlugin
     private DataManager dataManager;
     private int default_time;
 
+    public static double boost = 1.0;
+
+    public static NamespacedKey withdrawKey;
+
     @Override
     public void onEnable()
     {
+
+        withdrawKey = new NamespacedKey(this, "withdrawn-playtime");
 
         preInit();
 
@@ -33,7 +41,11 @@ public class TimedAccess extends JavaPlugin
         }
         new TimeCheckTask(this);
 
+        getServer().getPluginManager().registerEvents(new RedeemPlaytimeListener(this), this);
+
         getCommand("timedaccess").setExecutor(new MainCommand(this));
+
+        boost = dataManager.getBoost();
     }
 
     @Override

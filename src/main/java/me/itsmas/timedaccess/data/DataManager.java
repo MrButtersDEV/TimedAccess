@@ -3,6 +3,7 @@ package me.itsmas.timedaccess.data;
 import me.itsmas.timedaccess.TimedAccess;
 import me.itsmas.timedaccess.util.Permission;
 import me.itsmas.timedaccess.util.UtilReason;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -36,6 +37,14 @@ public class DataManager
         }
     }
 
+    public void saveBoost(double boostAmount) {
+        config.set("boost", boostAmount);
+    }
+
+    public double getBoost() {
+        return config.getDouble("boost");
+    }
+
     public long getTimeRemaining(OfflinePlayer player)
     {
         boolean bypass = bypasses(player);
@@ -54,7 +63,7 @@ public class DataManager
     {
         if (player.isOnline())
         {
-            return Permission.hasBypass(player.getPlayer());
+            return Permission.hasBypass(Bukkit.getPlayer(player.getUniqueId()));
         }
 
         return config.getBoolean(bypass(player));
@@ -83,6 +92,29 @@ public class DataManager
         UtilReason utilReason = new UtilReason(System.currentTimeMillis(), time, reason, senderName);
         reasons.add(utilReason.createReasonString());
         config.set(history(player), reasons);
+    }
+
+    public void removeTime(OfflinePlayer player, long time, String reason, CommandSender sender)
+    {
+        long remaining = getTimeRemaining(player);
+
+        long left = (remaining-time);
+        if (left<0) {
+            left = 0;
+        }
+
+        config.set(path(player), System.currentTimeMillis() + left);
+//        ArrayList<String> reasons = new ArrayList<>();
+//        if (config.contains(history(player))) {
+//            reasons = (ArrayList<String>) config.getStringList(history(player));
+//        }
+//        String senderName = "CONSOLE";
+//        if (sender!=null) {
+//            senderName = sender.getName();
+//        }
+//        UtilReason utilReason = new UtilReason(System.currentTimeMillis(), time, reason, senderName);
+//        reasons.add(utilReason.createReasonString());
+//        config.set(history(player), reasons);
     }
 
     public ArrayList<String> getReasons(OfflinePlayer player) {
